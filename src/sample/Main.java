@@ -40,6 +40,7 @@ public class Main extends Application {
     private List<Entity> stillObjects = new ArrayList<>();
 
 
+
     @Override
     public void start(@NotNull Stage stage) throws Exception {
         // Tao Canvas
