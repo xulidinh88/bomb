@@ -1,88 +1,107 @@
 package sample;
 
+import com.sun.corba.se.impl.orbutil.graph.Graph;
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
-        import javafx.application.Application;
-        import javafx.scene.Group;
-        import javafx.scene.Scene;
-        import javafx.scene.canvas.Canvas;
-        import javafx.scene.canvas.GraphicsContext;
-        import javafx.stage.Stage;
-        import org.jetbrains.annotations.NotNull;
-        import sample.Model.*;
-        import sample.graphics.Sprite;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import sample.Model.*;
+import sample.Model.Entity;
 
-        import java.io.BufferedReader;
-        import java.io.File;
-        import java.io.FileReader;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.io.BufferedReader;
-        import java.io.File;
-        import java.io.FileNotFoundException;
-        import java.io.FileReader;
-        import java.io.IOException;
-        import java.util.ArrayList;
-        import java.util.logging.Level;
-        import java.util.logging.Logger;
-        import java.io.BufferedReader;
-        import java.io.FileNotFoundException;
-        import java.io.FileReader;
-        import java.io.IOException;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
+import sample.controllers.Controller;
+import sun.plugin2.message.GetAppletMessage;
+
+import javax.naming.TimeLimitExceededException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import sample.controllers.Controller;
+import sample.graphics.Sprite;
 
 public class Main extends Application {
 
-    public static final int WIDTH = 31;
-    public static final int HEIGHT = 13;
-
+    private int WIDTH;
+    private int HEIGHT;
+    private final int FPS = 60;
+    private final int speed = 30;
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
-    private List<Entity> stillObjects = new ArrayList<>();
+//    private List<Entity> entities = new ArrayList<>();
+//    private List<Entity> stillObjects = new ArrayList<>();
 
+    public static List<Entity> ObjectToChange = new ArrayList<Entity>();
+    public static List<Entity> staticObject = new ArrayList<>();
+    public static List<Entity> Explosion = new ArrayList<>();
+    public static boolean upkey = false;
+    public static boolean rightkey = false;
+    public static boolean downkey = false;
+    public static boolean leftKey = false;
 
 
     @Override
-    public void start(@NotNull Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception {
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        // Tao root container
-        Group root = new Group();
-        root.getChildren().add(canvas);
-
-        // Tao scene
+        Pane root = (Pane) FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Canvas display = (Canvas) Controller.getNode("display", root);
+        GraphicsContext gc = display.getGraphicsContext2D();
+        int[] size = Controller.loadObjectToList(ObjectToChange,staticObject);
+        root.setPrefSize(size[1]* Controller.SCALESIZE + 50, size[0]* Controller.SCALESIZE + 50);
+        stage.setTitle("Bomberman Game");
         Scene scene = new Scene(root);
+
+        //GET SIZE MAP
+        HEIGHT = size[0]* Controller.SCALESIZE;
+        display.setHeight(HEIGHT);
+        WIDTH = size[1]* Controller.SCALESIZE;
+        display.setWidth(WIDTH);
+
+        //CREATE MAP
+        render(gc);
 
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
 
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                render();
-                update();
-            }
-        };
-        timer.start();
-
     }
 
+    private void render(GraphicsContext gc) {
+        gc.clearRect(0,0,WIDTH,HEIGHT);
+        for (Entity e: staticObject) {
+            e.render(gc);
+        }
+        for (Entity e: Explosion) {
+            e.render(gc);
+        }
+        for (Entity e: ObjectToChange) {
+            e.render(gc);
+        }
+    }
     public static void main(String[] args) {
         launch(args);
     }
 
-
-
-
-    public void update() {
-        entities.forEach(Entity::update);
-    }
-
-    public void render() {
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
-    }
 }
