@@ -25,6 +25,45 @@ import java.net.URL;
 
 
 public class Bomber extends Entity {
+    private boolean isDelete = false;
+    public boolean isDie = false;
+    private long timeDead;
+
+    // Khi gap Brick voi Wall
+    public boolean collinsMap() {
+        boolean collinsMap = false;
+        for (Entity e: Main.staticObject) {
+            if (e instanceof Wall) {
+                if(this.collision(e))
+                {
+                    if(trangThai.equals(Huong.LEN)) this.y += STEP;
+                    if(trangThai.equals(Huong.XUONG))this.y -= STEP;
+                    if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
+                    if(trangThai.equals(Huong.TRAI)) this.x += STEP;
+                    collinsMap = true;
+                    break;
+                }
+            }
+            else continue;
+        }
+        for (Entity e:Main.ObjectToChange)
+        {
+            if(e instanceof Brick)
+            {
+                if(this.collision(e))
+                {
+                    if(trangThai.equals(Huong.LEN)) this.y += STEP;
+                    if(trangThai.equals(Huong.XUONG))this.y -= STEP;
+                    if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
+                    if(trangThai.equals(Huong.TRAI)) this.x += STEP;
+                    collinsMap = true;
+                    break;
+                }
+            }
+            else continue;
+        }
+        return collinsMap;
+    }
 
     Animation player_right;
     Animation player_left;
@@ -93,6 +132,76 @@ public class Bomber extends Entity {
         player_dead.add(new Image(bomberDead2));
     }
 
+    public void thaBom()
+    {
+        System.out.println("Thả bom");
+        Bomb b = new Bomb(this.y,this.x);
+        Main.ObjectToChange.add(b);
+    }
+
+    public void KeyPress(KeyEvent e) {
+        System.out.println(e.getCode().toString());
+        switch (e.getCode().toString()) {
+            case "LEFT":
+                Main.upkey = false;
+                Main.downkey = false;
+                Main.rightkey = false;
+                Main.leftKey = true;
+                break;
+            case "RIGHT":
+                Main.upkey = false;
+                Main.downkey = false;
+                Main.rightkey = true;
+                Main.leftKey = false;
+                break;
+            case "UP":
+                Main.upkey = true;
+                Main.downkey = false;
+                Main.rightkey = false;
+                Main.leftKey = false;
+                break;
+            case "DOWN":
+                Main.upkey = false;
+                Main.downkey = true;
+                Main.rightkey = false;
+                Main.leftKey = false;
+                break;
+            case "SPACE":
+                thaBom();
+                break;
+        }
+    }
+    public void keyRelease(KeyEvent e) {
+
+        Main.upkey = false;
+        Main.downkey = false;
+        Main.rightkey = false;
+        Main.leftKey = false;
+        moveStepY = 0;
+        moveStepX = 0;
+    }
+    public void Tien() {
+        moveStepX = STEP;
+        trangThai = Huong.PHAI;
+        this.img = player_right.getCurrentFrame();
+    }
+    public void Lui() {
+        moveStepX = -STEP;
+        trangThai = Huong.TRAI;
+        ;
+        this.img = player_left.getCurrentFrame();
+    }
+    public void Len() {
+        moveStepY = -STEP;
+        trangThai = Huong.LEN;
+        this.img = player_up.getCurrentFrame();
+    }
+
+    public void Xuong() {
+        moveStepY = STEP;
+        trangThai = Huong.XUONG;
+        this.img = player_down.getCurrentFrame();
+    }
     @Override
     public void update() {
 
