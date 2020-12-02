@@ -4,11 +4,11 @@ import javafx.scene.image.Image;
 
 public class Grass extends Entity {
 
-    public Grass(int x, int y, String imgpath, int width, int height)
+    private final static String urlImage = "sample/Image/grass.png";
+    public Grass(int x, int y)
     {
-        super(x, y, imgpath, width, height);
+        super(x, y, new Image(urlImage));
     }
-
     @Override
     public void update() {
 

@@ -1,6 +1,6 @@
 package sample;
 
-        import javafx.animation.AnimationTimer;
+import javafx.animation.AnimationTimer;
         import javafx.application.Application;
         import javafx.scene.Group;
         import javafx.scene.Scene;
@@ -67,10 +67,6 @@ public class Main extends Application {
         };
         timer.start();
 
-        createMap();
-
-        Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        entities.add(bomberman);
     }
 
     public static void main(String[] args) {
@@ -78,38 +74,7 @@ public class Main extends Application {
     }
 
 
-    public void createMap() throws Exception {
 
-        String url = "D:\\Code\\JAVA\\bomb\\src\\sample\\level.txt";
-        File file = new File(url);
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String target[][] = new String[31][31];
-
-        try {
-            for (int i = 0; i < HEIGHT; i++) {
-                String line = reader.readLine();
-                for (int j = 0; j < WIDTH; j++) {
-                    target[i][j] = String.valueOf(line.charAt(j));
-                    Entity object;
-                    if (target[i][j].equals("#")) {
-                        object = new Wall(j, i, Sprite.wall.getFxImage());
-                        stillObjects.add(object);
-                    } else if (target[i][j].equals("p")) {
-
-                        }
-                        else if (target[i][j].equals("*")) {
-                            object = new Brick(j, i, Sprite.brick_exploded.getFxImage());
-                            stillObjects.add(object);
-                        } else {
-                        object = new Brick(j, i, Sprite.grass.getFxImage());
-                        stillObjects.add(object);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void update() {
         entities.forEach(Entity::update);

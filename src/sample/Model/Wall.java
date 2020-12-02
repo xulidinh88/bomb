@@ -5,10 +5,11 @@ import javafx.scene.image.Image;
 
 public class Wall extends Entity {
 
-    public Wall(int x, int y, String imgpath, int width, int height) {
-        super(x, y, imgpath, width, height);
+    private final static String urlImage = "sample/Image/wall.png";
+    public Wall(int x, int y)
+    {
+        super(x, y, new Image(urlImage));
     }
-
     @Override
     public void update() {
 
