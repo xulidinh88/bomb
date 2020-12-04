@@ -1,5 +1,6 @@
 package sample;
 
+
 import com.sun.corba.se.impl.orbutil.graph.Graph;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
@@ -31,13 +32,8 @@ import sample.controllers.Controller;
 import sun.plugin2.message.GetAppletMessage;
 
 import javax.naming.TimeLimitExceededException;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import sample.controllers.Controller;
-import sample.graphics.Sprite;
+
+import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -51,8 +47,8 @@ public class Main extends Application {
 //    private List<Entity> stillObjects = new ArrayList<>();
 
     public static List<Entity> ObjectToChange = new ArrayList<Entity>();
-    public static List<Entity> staticObject = new ArrayList<>();
-    public static List<Entity> Explosion = new ArrayList<>();
+    public static List<Entity> staticObject = new ArrayList<Entity>();
+    public static List<Entity> Explosion = new ArrayList<Entity>();
 
     public static boolean upkey = false;
     public static boolean rightkey = false;

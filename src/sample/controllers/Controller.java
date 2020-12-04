@@ -38,27 +38,28 @@ public class Controller {
     public static int[] loadObjectToList(List<Entity> ObjectToChange, List<Entity> staticObject) {
         int row = 0;
         int col = 0;
+        MAP = null;
         try {
-            File file = new File("D:\\Code\\JAVA\\bomb\\src\\sample\\level.txt");
-            InputStream inputStream = new FileInputStream(file);
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader reader = new BufferedReader(inputStreamReader);
-
-            String firstLine[] = reader.readLine().split(" ");
-            int level = Integer.parseInt(firstLine[0]);
-            row = Integer.parseInt(firstLine[1]);
-            col = Integer.parseInt(firstLine[2]);
-            System.out.println("Level: " + level);
+            String urlMap = new File("").getAbsolutePath() + "\\out\\production\\bomb\\sample\\";
+            File myObj = new File(urlMap + "level.txt");
+            Scanner myReader = new Scanner(myObj);
+            String firstline = myReader.nextLine();
+            String[] mapsize = firstline.split(" ", 3);
+            row = Integer.parseInt(mapsize[1]);
+            col = Integer.parseInt(mapsize[2]);
+            int level1 = Integer.parseInt(mapsize[0]);
+            System.out.println("Level: " + level1);
             System.out.println("Rows:  " + row);
             System.out.println("Colums:  " + col);
-            MAP = new char[row][col];
+            int i = 0;
+            while(myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                //System.out.println(data);
+                for(int j = 0;j < col;j++)
+                {
 
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < col; j++) {
-                    char read = (char) reader.read();
-                    if (read == '\n') j--;
-                    else {MAP[i][j] = read;System.out.print(MAP[i][j]);}
-
+                    char read = data.charAt(j);
+                    //System.out.print(read + ": " +i +"," +j);
                     if (read == '#') staticObject.add(new Wall(i * SCALESIZE, j * SCALESIZE));
                     if (read != '#')
                     {
@@ -69,13 +70,16 @@ public class Controller {
                             ObjectToChange.add(player);
                         }
                         else if(read == '*') ObjectToChange.add(new Brick(i*SCALESIZE,j*SCALESIZE));
-                        else if(read == '1') ObjectToChange.add(new Balloom(i*SCALESIZE,j*SCALESIZE));
+                        else if(read == '1') {
+                            ObjectToChange.add(new Balloom(i*SCALESIZE,j*SCALESIZE));
+                        }
+//                        else if(read == 'x')ObjectToChange.add(new Portal(i*SCALESIZE,j*SCALESIZE));
+//                        else if(read == 'f')ObjectToChange.add(new FrameItem(i*SCALESIZE,j*SCALESIZE));
                     }
                 }
-                System.out.println();
-
+                i++;
             }
-            reader.close();
+            myReader.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
