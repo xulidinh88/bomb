@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 import sample.controllers.Controller;
 import sample.graphics.Sprite;
 
-public abstract class Entity {
+public class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
     protected int x;
 

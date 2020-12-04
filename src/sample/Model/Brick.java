@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import sample.Main;
 
 public class Brick extends Entity {
 
@@ -22,8 +23,28 @@ public class Brick extends Entity {
         brickDelete.add(new Image(brick1));
         brickDelete.add(new Image(brick2));
     }
+    boolean isDelete = false;
+    boolean chayHieuUng = false;
+    long timeInit;
+    long thoiGianChayHieuUng = 600;
     @Override
     public void update() {
+        if(isDelete)
+        {
+            if(chayHieuUng == false)
+            {
+                chayHieuUng =true;
+                timeInit = System.currentTimeMillis();
+            }
+            if(chayHieuUng)
+            {
+                this.img = brickDelete.getCurrentFrame(200);
+                if(System.currentTimeMillis() - timeInit >= thoiGianChayHieuUng)
+                {
+                    Main.ObjectToChange.remove(this);
+                }
+            }
 
+        }
     }
 }

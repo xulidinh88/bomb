@@ -1,7 +1,10 @@
 package sample.Model;
 
 import javafx.scene.image.Image;
+import sample.Main;
 import sample.controllers.Controller;
+
+import java.util.Random;
 
 public class Balloom extends Entity{
     private final static String balloomLeft = "sample/Image/balloom_left1.png";
@@ -33,6 +36,9 @@ public class Balloom extends Entity{
     Animation aniBalloomDown;
     Animation aniBalloomDead;
 
+    public boolean isDie = false;
+    private boolean isDelete = false;
+    private long timeDead;
 
     public Balloom(int x, int y){
         super(x,y,new Image(balloomLeft), Controller.SCALESIZE, Controller.SCALESIZE);
@@ -62,5 +68,139 @@ public class Balloom extends Entity{
         aniBalloomDead.add(new Image(balloomDead0));
         aniBalloomDead.add(new Image(balloomDead1));
         aniBalloomDead.add(new Image(balloomDead2));
+    }
+
+    private int huong = 0;
+    @Override
+    public void update() {
+        if(isDie)
+        {
+            if(isDelete == false)
+            {
+                isDelete = true;
+                timeDead = System.currentTimeMillis();//Lưu lại thời gian lúc bắt đầu va chạm chết để xử lý Animation
+            }
+            else if(isDelete)
+            {
+                this.img = aniBalloomDead.getCurrentFrame(250);
+                if(System.currentTimeMillis() - timeDead >= 1000) //xóa Object
+                {
+                    Main.ObjectToChange.remove(this);
+                }
+            }
+
+        }
+        else
+        {
+            if(huong == 0)
+            {
+                if(!checkVaChamWalBrickBomb())
+                {
+                    moveLeft();
+                    this.img = aniBalloomLeft.getCurrentFrame(100);
+                }
+                else
+                {
+                    System.out.println("Va chạm đổi hướng");
+                    moveRight();
+                    randomHuong();
+                }
+            }
+            else if(huong == 1)
+            {
+                if(!checkVaChamWalBrickBomb())
+                {
+                    moveRight();
+                    this.img = aniBalloomRight.getCurrentFrame(100);
+                }
+                else
+                {
+                    moveLeft();
+                    randomHuong();
+                }
+            }
+
+            else if(huong == 2)
+            {
+                if(!checkVaChamWalBrickBomb())
+                {
+                    moveUp();
+                    this.img = aniBalloomUp.getCurrentFrame(100);
+                }
+                else
+                {
+                    moveDown();
+                    randomHuong();
+                }
+
+            }
+            else if(huong == 3)
+            {
+                if(!checkVaChamWalBrickBomb())
+                {
+                    moveDown();
+                    this.img = aniBalloomDown.getCurrentFrame(100);
+                }
+                else
+                {
+                    moveUp();
+                    randomHuong();
+                }
+            }
+        }
+
+        /*
+            Random integer:
+            0: Trái
+            1: Phải
+            2: Trên
+            3: Xuống
+         */
+
+    }
+    public void moveLeft()
+    {
+        this.x -= STEP;
+    }
+    public void moveRight()
+    {
+        this.x += STEP;
+    }
+    public void moveUp()
+    {
+        this.y -= STEP;
+    }
+    public void moveDown()
+    {
+        this.y += STEP;
+    }
+
+    public boolean checkVaChamWalBrickBomb()
+    {
+        for (Entity i: Main.staticObject) {
+            if(i instanceof Wall)
+            {
+                if(this.collision(i))
+                {
+                    return true;
+                }
+            }
+        }
+        for (Entity i: Main.ObjectToChange) {
+            if(i instanceof Brick || i instanceof Bomb)
+            {
+                if(this.collision(i))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void randomHuong()
+    {
+        Random rd = new Random();
+        huong = rd.nextInt(4);
     }
 }

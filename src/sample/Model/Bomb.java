@@ -17,7 +17,7 @@ public class Bomb extends Entity {
         this.img = bom.getCurrentFrame(100);
         if(System.currentTimeMillis() - timeInit >= thoiGianPhatNo)
         {
-
+            Explosion vuNo = new Explosion(this.x, this.y);
             Main.ObjectToChange.remove(this);
         }
     }
