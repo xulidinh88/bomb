@@ -49,12 +49,16 @@ public abstract class Entity {
         this.height = height;
     }
 
-    public Boolean collision(Entity entity) {
-        if (entity.x >= this.x && entity.x - this.x < this.width && entity.y >= this.y && entity.y - this.y < this.height) return true;
-        if (this.x >= entity.x && this.x - entity.x < entity.width && entity.y >= this.y && entity.y - this.y < this.height) return true;
-        if (entity.x >= this.x && entity.x - this.x < this.width && this.y >= entity.y && this.y - entity.y < entity.height) return true;
-        if (this.x >= entity.x && this.x - entity.x < entity.width && this.y >= entity.y && this.y - entity.y < entity.height) return true;
-        return false;
+    public Boolean collision(Entity entities) {
+        if (entities.x >= this.x && entities.x - this.x < this.width && entities.y >= this.y && entities.y - this.y < this.height) {
+            return true;
+        } else if (this.x >= entities.x && this.x - entities.x < entities.width && entities.y >= this.y && entities.y - this.y < this.height) {
+            return true;
+        } else if (entities.x >= this.x && entities.x - this.x < this.width && this.y >= entities.y && this.y - entities.y < entities.height) {
+            return true;
+        } else {
+            return this.x >= entities.x && this.x - entities.x < entities.width && this.y >= entities.y && this.y - entities.y < entities.height ? true : false;
+        }
     }
     public void render(GraphicsContext gc) {
         gc.drawImage(img,x,y, Controller.SCALESIZE, Controller.SCALESIZE);

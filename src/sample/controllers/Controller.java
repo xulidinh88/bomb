@@ -18,8 +18,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import static javafx.scene.input.KeyCode.*;
+
 public class Controller {
-    public static int kichThuocVuNo = 1;
+    public static int kichThuocVuNo = 1; //Kích thước của vụ nổ tính từ tâm ra
     public final static int SCALESIZE = 32;
     public static Bomber player;
     public static char[][] MAP;
@@ -37,8 +39,7 @@ public class Controller {
         int row = 0;
         int col = 0;
         try {
-            String urlMap = new File("").getAbsolutePath() + "D:\\Code\\JAVA\\bomb\\src\\sample";
-            File file = new File(urlMap + "Level1.txt");
+            File file = new File("D:\\Code\\JAVA\\bomb\\src\\sample\\level.txt");
             InputStream inputStream = new FileInputStream(file);
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader reader = new BufferedReader(inputStreamReader);

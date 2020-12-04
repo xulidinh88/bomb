@@ -28,14 +28,58 @@ public class Bomber extends Entity {
     private boolean isDelete = false;
     public boolean isDie = false;
     private long timeDead;
-
-    // Khi gap Brick voi Wall
-    public boolean collinsMap() {
-        boolean collinsMap = false;
-        for (Entity e: Main.staticObject) {
-            if (e instanceof Wall) {
-                if(this.collision(e))
+    @Override
+    public void update() {
+        //Xử lý va chạm:
+        for (Entity i:Main.ObjectToChange) {
+            if(i instanceof Balloom)
+            {
+                if(this.collision(i))
                 {
+                    this.isDie = true;
+                    break;
+                }
+            }
+            else continue;
+        }
+        if(isDie)
+        {
+            if(!isDelete)
+            {
+                isDelete = true;
+                timeDead = System.currentTimeMillis();
+            }
+            else
+            {
+                this.img = player_dead.getCurrentFrame(300);
+                if(System.currentTimeMillis() - timeDead >= 900)
+                {
+                    Main.ObjectToChange.remove(this);
+                }
+            }
+        }
+        else
+        {
+            if(!collinsMap())
+            {
+                this.x += moveStepX;
+                this.y += moveStepY;
+            }
+        }
+    }
+
+    //Check va chạm với Brick và Wall
+    public boolean collinsMap()
+    {
+        //System.out.println("Toa do: "+x+","+y);
+        boolean collinsMap = false;
+        for(Entity o: Main.staticObject)
+        {
+            if(o instanceof Wall)
+            {
+                if(this.collision(o))
+                {
+                    System.out.println("Va cham");
                     if(trangThai.equals(Huong.LEN)) this.y += STEP;
                     if(trangThai.equals(Huong.XUONG))this.y -= STEP;
                     if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
@@ -46,12 +90,13 @@ public class Bomber extends Entity {
             }
             else continue;
         }
-        for (Entity e:Main.ObjectToChange)
+        for (Entity o:Main.ObjectToChange)
         {
-            if(e instanceof Brick)
+            if(o instanceof Brick)
             {
-                if(this.collision(e))
+                if(this.collision(o))
                 {
+                    System.out.println("Va cham");
                     if(trangThai.equals(Huong.LEN)) this.y += STEP;
                     if(trangThai.equals(Huong.XUONG))this.y -= STEP;
                     if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
@@ -65,19 +110,9 @@ public class Bomber extends Entity {
         return collinsMap;
     }
 
-    Animation player_right;
-    Animation player_left;
-    Animation player_up;
-    Animation player_down;
-    Animation player_dead;
-
     enum Huong {
         DUNGIM, PHAI, TRAI, LEN, XUONG;
     }
-
-    Huong trangThai = Huong.DUNGIM;
-
-    public int moveStepX, moveStepY;
 
     private final int STEP = Controller.SCALESIZE /8;
     private final static String bomberRigh = "sample/Image/player_right.png";
@@ -100,8 +135,18 @@ public class Bomber extends Entity {
     private final static String bomberDead1 = "sample/Image/player_dead2.png";
     private final static String bomberDead2 = "sample/Image/player_dead3.png";
 
+    Animation player_right;
+    Animation player_left;
+    Animation player_up;
+    Animation player_down;
+    Animation player_dead;
+
+    Huong trangThai = Huong.DUNGIM;
+
+    public int moveStepX, moveStepY;
+
     public Bomber(int x, int y) {
-        super(x, y, new Image(bomberRigh), Controller.SCALESIZE-4, Controller.SCALESIZE-3);
+        super(x, y, new Image(bomberRigh),Controller.SCALESIZE-4, Controller.SCALESIZE-3);
 
         moveStepX = 0;
         moveStepY = 0;
@@ -130,13 +175,6 @@ public class Bomber extends Entity {
         player_dead.add(new Image(bomberDead));
         player_dead.add(new Image(bomberDead1));
         player_dead.add(new Image(bomberDead2));
-    }
-
-    public void thaBom()
-    {
-        System.out.println("Thả bom");
-        Bomb b = new Bomb(this.y,this.x);
-        Main.ObjectToChange.add(b);
     }
 
     public void KeyPress(KeyEvent e) {
@@ -171,6 +209,7 @@ public class Bomber extends Entity {
                 break;
         }
     }
+
     public void keyRelease(KeyEvent e) {
 
         Main.upkey = false;
@@ -180,17 +219,25 @@ public class Bomber extends Entity {
         moveStepY = 0;
         moveStepX = 0;
     }
+    public void thaBom()
+    {
+        System.out.println("Thả bom");
+        Bomb b = new Bomb(this.y,this.x);
+        Main.ObjectToChange.add(b);
+    }
     public void Tien() {
         moveStepX = STEP;
         trangThai = Huong.PHAI;
         this.img = player_right.getCurrentFrame();
     }
+
     public void Lui() {
         moveStepX = -STEP;
         trangThai = Huong.TRAI;
         ;
         this.img = player_left.getCurrentFrame();
     }
+
     public void Len() {
         moveStepY = -STEP;
         trangThai = Huong.LEN;
@@ -202,8 +249,5 @@ public class Bomber extends Entity {
         trangThai = Huong.XUONG;
         this.img = player_down.getCurrentFrame();
     }
-    @Override
-    public void update() {
 
-    }
 }
