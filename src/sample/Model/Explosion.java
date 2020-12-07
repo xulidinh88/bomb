@@ -40,6 +40,18 @@ public class Explosion extends Entity {
                 {
                     if(i.collision(j))((Balloom) j).isDie = true;
                 }
+                else if(j instanceof Portal)
+                {
+                    if(i.collision(j))((Portal) j).hienThiPortal = true;
+                }
+                else if(j instanceof BombItem)
+                {
+                    if(i.collision(j))((BombItem) j).hienThiBombItem = true;
+                }
+                else if(j instanceof SpeedItem)
+                {
+                    if(i.collision(j))((SpeedItem) j).hienThiSpeedItem = true;
+                }
             }
             i.update();
         }
@@ -47,8 +59,6 @@ public class Explosion extends Entity {
         {
             for (donViNo i:listDonViNo) {
                 Main.Explosion.remove(this);
-                //Main.ObjectToChange.remove(i);
-                //Main.ObjectToChange.remove(this);
             }
         }
     }
@@ -59,7 +69,6 @@ public class Explosion extends Entity {
         timeInit = System.currentTimeMillis();
         donViNo tam = new donViNo(x,y,0);
         listDonViNo.add(tam);
-        //Main.ObjectToChange.add(tam);
         for(int i = 1;i<=Controller.kichThuocVuNo;i++)
         {
             if(i == Controller.kichThuocVuNo)
@@ -69,7 +78,6 @@ public class Explosion extends Entity {
                 if(khoiTaoTrai)
                 {
                     donViNo traiLast = new donViNo(x-Controller.SCALESIZE*i,y,2);
-//
                     Entity collins = (Entity) collinsWith(traiLast);
                     if(collins instanceof Wall){khoiTaoTrai = false;}
                     else

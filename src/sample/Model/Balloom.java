@@ -82,6 +82,7 @@ public class Balloom extends Entity{
             }
             else if(isDelete)
             {
+                Controller.bot--;
                 this.img = aniBalloomDead.getCurrentFrame(250);
                 if(System.currentTimeMillis() - timeDead >= 1000) //xóa Object
                 {

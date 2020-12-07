@@ -21,9 +21,12 @@ import java.util.List;
 import static javafx.scene.input.KeyCode.*;
 
 public class Controller {
+    public static int speed = 30;
     public static int kichThuocVuNo = 1; //Kích thước của vụ nổ tính từ tâm ra
     public final static int SCALESIZE = 32;
+    public static boolean GAME_OVER = false;
     public static Bomber player;
+    public static int bot = 0;
     public static char[][] MAP;
     public static Node getNode(String id, Pane root) {
         Node result = null;
@@ -38,6 +41,7 @@ public class Controller {
     public static int[] loadObjectToList(List<Entity> ObjectToChange, List<Entity> staticObject) {
         int row = 0;
         int col = 0;
+        bot = 0;
         MAP = null;
         try {
             String urlMap = new File("").getAbsolutePath() + "\\out\\production\\bomb\\sample\\";
@@ -72,9 +76,11 @@ public class Controller {
                         else if(read == '*') ObjectToChange.add(new Brick(i*SCALESIZE,j*SCALESIZE));
                         else if(read == '1') {
                             ObjectToChange.add(new Balloom(i*SCALESIZE,j*SCALESIZE));
+                            bot++;
                         }
-//                        else if(read == 'x')ObjectToChange.add(new Portal(i*SCALESIZE,j*SCALESIZE));
-//                        else if(read == 'f')ObjectToChange.add(new FrameItem(i*SCALESIZE,j*SCALESIZE));
+                        else if(read == 'x')ObjectToChange.add(new Portal(i*SCALESIZE,j*SCALESIZE));
+                        else if(read == 'f')ObjectToChange.add(new BombItem(i*SCALESIZE,j*SCALESIZE));
+                        else if(read == 's')ObjectToChange.add(new SpeedItem(i*SCALESIZE,j*SCALESIZE));
                     }
                 }
                 i++;

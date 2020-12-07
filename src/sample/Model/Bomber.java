@@ -9,6 +9,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.jetbrains.annotations.NotNull;
 import sample.controllers.Controller;
 import sample.Main;
 
@@ -54,6 +55,7 @@ public class Bomber extends Entity {
                 this.img = player_dead.getCurrentFrame(300);
                 if(System.currentTimeMillis() - timeDead >= 900)
                 {
+                    Controller.GAME_OVER = true;
                     Main.ObjectToChange.remove(this);
                 }
             }
@@ -71,7 +73,6 @@ public class Bomber extends Entity {
     //Check va chạm với Brick và Wall
     public boolean collinsMap()
     {
-        //System.out.println("Toa do: "+x+","+y);
         boolean collinsMap = false;
         for(Entity o: Main.staticObject)
         {
@@ -104,6 +105,92 @@ public class Bomber extends Entity {
                     collinsMap = true;
                     break;
                 }
+            }
+            else if(o instanceof Portal)
+            {
+                if(this.collision(o))
+                {
+                    if(((Portal) o).hienThiPortal == false)
+                    {
+                        System.out.println("Va cham");
+                        if(trangThai.equals(Huong.LEN)) this.y += STEP;
+                        if(trangThai.equals(Huong.XUONG))this.y -= STEP;
+                        if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
+                        if(trangThai.equals(Huong.TRAI)) this.x += STEP;
+                        collinsMap = true;
+                        break;
+                    }
+                    else if(((Portal) o).hienThiPortal == true)
+                    {
+                        //Kiểm tra Balloom đã bị tiêu diệt hết chưa và qua màn
+                        System.out.println(Controller.bot);
+                        if(Controller.bot == 0)
+                        {
+                            System.out.println("Qua màn");
+                        }
+                        else
+                        {
+                            //Không thể đi vào
+                            System.out.println("Va cham");
+                            if(trangThai.equals(Huong.LEN)) this.y += STEP;
+                            if(trangThai.equals(Huong.XUONG))this.y -= STEP;
+                            if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
+                            if(trangThai.equals(Huong.TRAI)) this.x += STEP;
+                            collinsMap = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            else if(o instanceof BombItem)
+            {
+                if(this.collision(o))
+                {
+                    if(((BombItem) o).hienThiBombItem == true)
+                    {
+                        //Nếu ăn thì xóa FramItem đi và tăng phạm vi nổ
+                        //playSound.play_anItem();
+                        Main.ObjectToChange.remove(o);
+                        Controller.kichThuocVuNo++;
+                    }
+                    else
+                    {
+                        System.out.println("Va cham Flame");
+
+                        if(trangThai.equals(Huong.LEN)) this.y += STEP;
+                        if(trangThai.equals(Huong.XUONG))this.y -= STEP;
+                        if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
+                        if(trangThai.equals(Huong.TRAI)) this.x += STEP;
+                        collinsMap = true;
+                        break;
+
+                    }
+                }
+
+            }
+            else if(o instanceof SpeedItem)
+            {
+                if(this.collision(o))
+                {
+                    if(((SpeedItem) o).hienThiSpeedItem == true)
+                    {
+                        Main.ObjectToChange.remove(o);
+                        Controller.speed -= 20;
+                    }
+                    else
+                    {
+                        System.out.println("Va cham Flame");
+
+                        if(trangThai.equals(Huong.LEN)) this.y += STEP;
+                        if(trangThai.equals(Huong.XUONG))this.y -= STEP;
+                        if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
+                        if(trangThai.equals(Huong.TRAI)) this.x += STEP;
+                        collinsMap = true;
+                        break;
+
+                    }
+                }
+
             }
             else continue;
         }
@@ -177,7 +264,7 @@ public class Bomber extends Entity {
         player_dead.add(new Image(bomberDead2));
     }
 
-    public void KeyPress(KeyEvent e) {
+    public void KeyPress(@NotNull KeyEvent e) {
         System.out.println(e.getCode().toString());
         switch (e.getCode().toString()) {
             case "LEFT":

@@ -37,10 +37,10 @@ import java.util.ArrayList;
 
 public class Main extends Application {
 
+
     private int WIDTH;
     private int HEIGHT;
     private final int FPS = 60;
-    private final int speed = 30;
 //    private GraphicsContext gc;
 //    private Canvas canvas;
 //    private List<Entity> entities = new ArrayList<>();
@@ -84,8 +84,7 @@ public class Main extends Application {
             scene.setOnKeyReleased(event -> Controller.player.keyRelease(event));
 
             //Game loop:
-
-            Timeline gameloop = new Timeline(new KeyFrame(Duration.millis(speed), event -> {
+            Timeline gameloop = new Timeline(new KeyFrame(Duration.millis(Controller.speed), event -> {
 
                 if(rightkey) {
                     Controller.player.Tien();
@@ -102,7 +101,15 @@ public class Main extends Application {
                 }
 
             }), new KeyFrame(Duration.millis(1000/FPS), event -> {
-
+                if(Controller.GAME_OVER)
+                {
+                    //Nếu game over thì load lại luôn
+                    ResetGame();
+                    Controller.loadObjectToList(ObjectToChange,staticObject);
+                    render(gc);
+                    Controller.GAME_OVER = false;
+                    //gameloop.stop();
+                }
                 update();
                 render(gc);
             }));
@@ -148,6 +155,11 @@ public class Main extends Application {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+    public void ResetGame()
+    {
+        ObjectToChange = new ArrayList<Entity>();
+        staticObject = new ArrayList<Entity>();
     }
     public static void main(String[] args) {
         launch(args);
