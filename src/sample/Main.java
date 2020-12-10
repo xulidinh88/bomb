@@ -118,12 +118,12 @@ public class Main extends Application {
                 if(Controller.PHA_DAO == true)
                 {
                     renderManHinhPhaDao(gc);
+                    Sound.playGame();
                     gameloop.stop();
                 }
                 else
                 {
                     update();
-                    Sound.playGame();
                     render(gc);
                 }
             }));

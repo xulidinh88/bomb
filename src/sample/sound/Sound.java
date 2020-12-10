@@ -10,7 +10,7 @@ public class Sound {
     private final static String datBomURL = new File("").getAbsolutePath() + "\\src\\sample\\sound\\datBom.wav";
     private final static String anPortalURL = new File("").getAbsolutePath() + "\\src\\sample\\sound\\anPortal.wav";
     private final static String bigBangURL = new File("").getAbsolutePath() + "\\src\\sample\\sound\\bomb_bang.wav";
-    private final static String playSoundURL = new File("").getAbsolutePath() + "\\src\\sample\\sound\\village.wav";
+    private final static String playSoundURL = new File("").getAbsolutePath() + "\\src\\sample\\sound\\beethoven.wav";
     public static void play_anItem()
     {
         Media media = new Media(new File(anItemURl).toURI().toString());

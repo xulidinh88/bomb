@@ -273,8 +273,8 @@ public class Bomber extends Entity {
                 thaBom();
                 Sound.play_datBom();
                 break;
-            case "END":
-                Sound.play_anPortal();
+            case "ESCAPE":
+                Sound.playGame();
                 Controller.PHA_DAO = true;
                 break;
         }
