@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 
 public class Animation {
-    long time;
+    public static long time;
     int frame = 0;
     long delayFrame = 100;
     Image currentFrame;

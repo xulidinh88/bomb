@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import sample.Model.*;
@@ -29,6 +30,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import sample.controllers.Controller;
+import sample.sound.Sound;
 import sun.plugin2.message.GetAppletMessage;
 
 import javax.naming.TimeLimitExceededException;
@@ -46,6 +48,8 @@ public class Main extends Application {
 //    private List<Entity> entities = new ArrayList<>();
 //    private List<Entity> stillObjects = new ArrayList<>();
 
+    private String phaDaoURl = "sample/Image/congratulations.png";
+
     public static List<Entity> ObjectToChange = new ArrayList<Entity>();
     public static List<Entity> staticObject = new ArrayList<Entity>();
     public static List<Entity> Explosion = new ArrayList<Entity>();
@@ -55,6 +59,7 @@ public class Main extends Application {
     public static boolean downkey = false;
     public static boolean leftKey = false;
 
+    static Timeline gameloop;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -84,7 +89,7 @@ public class Main extends Application {
             scene.setOnKeyReleased(event -> Controller.player.keyRelease(event));
 
             //Game loop:
-            Timeline gameloop = new Timeline(new KeyFrame(Duration.millis(Controller.speed), event -> {
+            gameloop = new Timeline(new KeyFrame(Duration.millis(Controller.speed), event -> {
 
                 if(rightkey) {
                     Controller.player.Tien();
@@ -103,15 +108,24 @@ public class Main extends Application {
             }), new KeyFrame(Duration.millis(1000/FPS), event -> {
                 if(Controller.GAME_OVER)
                 {
-                    //Nếu game over thì load lại luôn
+
                     ResetGame();
+//                    Sound.playGame();
                     Controller.loadObjectToList(ObjectToChange,staticObject);
                     render(gc);
                     Controller.GAME_OVER = false;
-                    //gameloop.stop();
                 }
-                update();
-                render(gc);
+                if(Controller.PHA_DAO == true)
+                {
+                    renderManHinhPhaDao(gc);
+                    gameloop.stop();
+                }
+                else
+                {
+                    update();
+                    Sound.playGame();
+                    render(gc);
+                }
             }));
 
             gameloop.setCycleCount(Timeline.INDEFINITE);
@@ -124,6 +138,16 @@ public class Main extends Application {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+    }
+
+    private void renderManHinhPhaDao(GraphicsContext gc)
+    {
+        Sound.playGame();
+        Image phaDao = new Image(phaDaoURl);
+        gc.clearRect(0,0,WIDTH,HEIGHT);
+        gc.drawImage(phaDao,0+(WIDTH/2 - phaDao.getWidth()/2),0);
+        System.out.println("Xóa màn hình");
 
     }
 

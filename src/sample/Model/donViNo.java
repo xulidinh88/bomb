@@ -3,6 +3,7 @@ package sample.Model;
 import sample.controllers.Controller;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import sample.sound.Sound;
 
 public class donViNo extends Entity {
     private int no;
@@ -52,6 +53,7 @@ public class donViNo extends Entity {
         super(x,y, Controller.SCALESIZE-5, Controller.SCALESIZE-5);
         this.no = no;
         animation = new Animation();
+        Sound.bigBang();
         if(no == 0) {
             this.img = new Image(tam);
             animation.add(new Image(tam));

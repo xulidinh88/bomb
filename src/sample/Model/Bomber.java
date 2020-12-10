@@ -1,28 +1,11 @@
 package sample.Model;
 
-import com.sun.org.apache.xerces.internal.impl.xpath.XPath;
-import com.sun.xml.internal.ws.wsdl.parser.MemberSubmissionAddressingWSDLParserExtension;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.jetbrains.annotations.NotNull;
 import sample.controllers.Controller;
 import sample.Main;
-
-import javax.imageio.ImageIO;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import sample.sound.Sound;
 
 
 public class Bomber extends Entity {
@@ -110,22 +93,13 @@ public class Bomber extends Entity {
             {
                 if(this.collision(o))
                 {
-                    if(((Portal) o).hienThiPortal == false)
-                    {
-                        System.out.println("Va cham");
-                        if(trangThai.equals(Huong.LEN)) this.y += STEP;
-                        if(trangThai.equals(Huong.XUONG))this.y -= STEP;
-                        if(trangThai.equals(Huong.PHAI)) this.x -=  STEP;
-                        if(trangThai.equals(Huong.TRAI)) this.x += STEP;
-                        collinsMap = true;
-                        break;
-                    }
-                    else if(((Portal) o).hienThiPortal == true)
-                    {
                         //Kiểm tra Balloom đã bị tiêu diệt hết chưa và qua màn
                         System.out.println(Controller.bot);
-                        if(Controller.bot == 0)
+                        if(Controller.bot <= 0)
                         {
+                            Sound.play_anPortal();
+                            Controller.PHA_DAO = true;
+                            Main.ObjectToChange.remove(o);
                             System.out.println("Qua màn");
                         }
                         else
@@ -139,7 +113,6 @@ public class Bomber extends Entity {
                             collinsMap = true;
                             break;
                         }
-                    }
                 }
             }
             else if(o instanceof BombItem)
@@ -148,14 +121,13 @@ public class Bomber extends Entity {
                 {
                     if(((BombItem) o).hienThiBombItem == true)
                     {
-                        //Nếu ăn thì xóa FramItem đi và tăng phạm vi nổ
-                        //playSound.play_anItem();
+                        Sound.play_anItem();
                         Main.ObjectToChange.remove(o);
                         Controller.kichThuocVuNo++;
                     }
                     else
                     {
-                        System.out.println("Va cham Flame");
+                        System.out.println("Va cham BombItem");
 
                         if(trangThai.equals(Huong.LEN)) this.y += STEP;
                         if(trangThai.equals(Huong.XUONG))this.y -= STEP;
@@ -168,18 +140,24 @@ public class Bomber extends Entity {
                 }
 
             }
-            else if(o instanceof SpeedItem)
+            else if(o instanceof DeleteOneItem)
             {
                 if(this.collision(o))
                 {
-                    if(((SpeedItem) o).hienThiSpeedItem == true)
+                    if(((DeleteOneItem) o).hienThiDeleteOneItem == true)
                     {
                         Main.ObjectToChange.remove(o);
-                        Controller.speed -= 20;
+                        Sound.play_anItem();
+                        for (Entity f: Main.ObjectToChange){
+                            if (f instanceof  Balloom || f instanceof Doll) {
+                                Main.ObjectToChange.remove(f);
+                                Controller.bot--;
+                            }
+                        }
                     }
                     else
                     {
-                        System.out.println("Va cham Flame");
+                        System.out.println("Va cham SpeedItem");
 
                         if(trangThai.equals(Huong.LEN)) this.y += STEP;
                         if(trangThai.equals(Huong.XUONG))this.y -= STEP;
@@ -293,6 +271,11 @@ public class Bomber extends Entity {
                 break;
             case "SPACE":
                 thaBom();
+                Sound.play_datBom();
+                break;
+            case "END":
+                Sound.play_anPortal();
+                Controller.PHA_DAO = true;
                 break;
         }
     }

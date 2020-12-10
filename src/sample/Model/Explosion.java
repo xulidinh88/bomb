@@ -1,7 +1,6 @@
 package sample.Model;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import sample.controllers.Controller;
 import sample.Main;
 import java.util.ArrayList;
@@ -40,17 +39,21 @@ public class Explosion extends Entity {
                 {
                     if(i.collision(j))((Balloom) j).isDie = true;
                 }
-                else if(j instanceof Portal)
+                else if(j instanceof Doll)
                 {
-                    if(i.collision(j))((Portal) j).hienThiPortal = true;
+                    if(i.collision(j))((Doll) j).isDie = true;
                 }
+//                else if(j instanceof Portal)
+//                {
+//                    if(i.collision(j))((Portal) j).hienThiPortal = true;
+//                }
                 else if(j instanceof BombItem)
                 {
                     if(i.collision(j))((BombItem) j).hienThiBombItem = true;
                 }
-                else if(j instanceof SpeedItem)
+                else if(j instanceof DeleteOneItem)
                 {
-                    if(i.collision(j))((SpeedItem) j).hienThiSpeedItem = true;
+                    if(i.collision(j))((DeleteOneItem) j).hienThiDeleteOneItem = true;
                 }
             }
             i.update();

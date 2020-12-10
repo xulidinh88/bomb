@@ -188,7 +188,7 @@ public class Balloom extends Entity{
             }
         }
         for (Entity i: Main.ObjectToChange) {
-            if(i instanceof Brick || i instanceof Bomb)
+            if(i instanceof Brick || i instanceof Bomb || i instanceof Portal || i instanceof BombItem || i instanceof DeleteOneItem)
             {
                 if(this.collision(i))
                 {

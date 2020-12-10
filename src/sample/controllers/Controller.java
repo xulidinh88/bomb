@@ -3,22 +3,10 @@ package sample.controllers;
 import javafx.scene.layout.Pane;
 import sample.Model.*;
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 
 import java.io.*;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import static javafx.scene.input.KeyCode.*;
 
 public class Controller {
     public static int speed = 30;
@@ -26,6 +14,7 @@ public class Controller {
     public final static int SCALESIZE = 32;
     public static boolean GAME_OVER = false;
     public static Bomber player;
+    public static boolean PHA_DAO = false;
     public static int bot = 0;
     public static char[][] MAP;
     public static Node getNode(String id, Pane root) {
@@ -78,9 +67,13 @@ public class Controller {
                             ObjectToChange.add(new Balloom(i*SCALESIZE,j*SCALESIZE));
                             bot++;
                         }
+                        else if(read == '2') {
+                            ObjectToChange.add(new Doll(i*SCALESIZE,j*SCALESIZE));
+                            bot++;
+                        }
                         else if(read == 'x')ObjectToChange.add(new Portal(i*SCALESIZE,j*SCALESIZE));
                         else if(read == 'f')ObjectToChange.add(new BombItem(i*SCALESIZE,j*SCALESIZE));
-                        else if(read == 's')ObjectToChange.add(new SpeedItem(i*SCALESIZE,j*SCALESIZE));
+                        else if(read == 's')ObjectToChange.add(new DeleteOneItem(i*SCALESIZE,j*SCALESIZE));
                     }
                 }
                 i++;

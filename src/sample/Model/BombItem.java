@@ -3,7 +3,7 @@ package sample.Model;
 import javafx.scene.image.Image;
 
 public class BombItem extends Entity{
-    private final static String Brick = "sample/Image/brick.png";
+    private final static String Brick = "sample/Image/gifttt.png";
     private final static String BomItem = "sample/Image/flameItem.png";
     public boolean hienThiBombItem = false;
 
