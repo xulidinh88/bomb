@@ -106,8 +106,7 @@ public class Main extends Application {
                 }
 
             }), new KeyFrame(Duration.millis(1000/FPS), event -> {
-                if(Controller.GAME_OVER)
-                {
+                if(Controller.GAME_OVER) {
 
                     ResetGame();
 //                    Sound.playGame();
@@ -115,14 +114,13 @@ public class Main extends Application {
                     render(gc);
                     Controller.GAME_OVER = false;
                 }
-                if(Controller.PHA_DAO == true)
-                {
+                if(Controller.PHA_DAO == true) {
                     renderManHinhPhaDao(gc);
                     Sound.playGame();
                     gameloop.stop();
                 }
-                else
-                {
+                else {
+                    //Sound.playGame();
                     update();
                     render(gc);
                 }
@@ -141,8 +139,7 @@ public class Main extends Application {
 
     }
 
-    private void renderManHinhPhaDao(GraphicsContext gc)
-    {
+    private void renderManHinhPhaDao(GraphicsContext gc) {
         Sound.playGame();
         Image phaDao = new Image(phaDaoURl);
         gc.clearRect(0,0,WIDTH,HEIGHT);
@@ -164,9 +161,8 @@ public class Main extends Application {
         }
     }
 
-    private void update()
-    {
-        try{
+    private void update() {
+        try {
             for(Entity o:Explosion)
             {
                 o.update();
@@ -180,8 +176,7 @@ public class Main extends Application {
             System.out.println(e.getMessage());
         }
     }
-    public void ResetGame()
-    {
+    public void ResetGame() {
         ObjectToChange = new ArrayList<Entity>();
         staticObject = new ArrayList<Entity>();
     }

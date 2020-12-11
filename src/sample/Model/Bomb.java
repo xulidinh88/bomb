@@ -22,8 +22,7 @@ public class Bomb extends Entity {
         }
     }
 
-    public Bomb(int x, int y)
-    {
+    public Bomb(int x, int y) {
         super(x, y,new Image(Bomb));
         timeInit = System.currentTimeMillis();
         bom = new Animation();

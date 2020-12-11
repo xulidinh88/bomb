@@ -6,7 +6,7 @@ import sample.controllers.Controller;
 
 import java.util.Random;
 
-public class Balloom extends Entity{
+public class Balloom extends Entity {
     private final static String balloomLeft = "sample/Image/balloom_left1.png";
     private final static String balloomLeft1 = "sample/Image/balloom_left2.png";
     private final static String balloomLeft2 = "sample/Image/balloom_left3.png";
@@ -73,77 +73,60 @@ public class Balloom extends Entity{
     private int huong = 0;
     @Override
     public void update() {
-        if(isDie)
-        {
-            if(isDelete == false)
-            {
+        if(isDie) {
+            if(isDelete == false) {
                 isDelete = true;
                 timeDead = System.currentTimeMillis();//Lưu lại thời gian lúc bắt đầu va chạm chết để xử lý Animation
             }
-            else if(isDelete)
-            {
+            else if(isDelete) {
                 Controller.bot--;
                 this.img = aniBalloomDead.getCurrentFrame(250);
-                if(System.currentTimeMillis() - timeDead >= 1000) //xóa Object
-                {
+                if(System.currentTimeMillis() - timeDead >= 1000) {
                     Main.ObjectToChange.remove(this);
                 }
             }
 
         }
-        else
-        {
-            if(huong == 0)
-            {
-                if(!checkVaChamWalBrickBomb())
-                {
+        else {
+            if(huong == 0) {
+                if(!checkVaChamWalBrickBomb()) {
                     moveLeft();
                     this.img = aniBalloomLeft.getCurrentFrame(100);
                 }
-                else
-                {
+                else {
                     System.out.println("Va chạm đổi hướng");
                     moveRight();
                     randomHuong();
                 }
             }
-            else if(huong == 1)
-            {
-                if(!checkVaChamWalBrickBomb())
-                {
+            else if(huong == 1) {
+                if(!checkVaChamWalBrickBomb()) {
                     moveRight();
                     this.img = aniBalloomRight.getCurrentFrame(100);
                 }
-                else
-                {
+                else {
                     moveLeft();
                     randomHuong();
                 }
             }
 
-            else if(huong == 2)
-            {
-                if(!checkVaChamWalBrickBomb())
-                {
+            else if(huong == 2) {
+                if(!checkVaChamWalBrickBomb()) {
                     moveUp();
                     this.img = aniBalloomUp.getCurrentFrame(100);
                 }
-                else
-                {
+                else {
                     moveDown();
                     randomHuong();
                 }
 
             }
-            else if(huong == 3)
-            {
-                if(!checkVaChamWalBrickBomb())
-                {
+            else if(huong == 3) {
+                if(!checkVaChamWalBrickBomb()) {
                     moveDown();
                     this.img = aniBalloomDown.getCurrentFrame(100);
                 }
-                else
-                {
+                else {
                     moveUp();
                     randomHuong();
                 }
@@ -176,11 +159,9 @@ public class Balloom extends Entity{
         this.y += STEP;
     }
 
-    public boolean checkVaChamWalBrickBomb()
-    {
+    public boolean checkVaChamWalBrickBomb() {
         for (Entity i: Main.staticObject) {
-            if(i instanceof Wall)
-            {
+            if(i instanceof Wall) {
                 if(this.collision(i))
                 {
                     return true;
@@ -188,10 +169,8 @@ public class Balloom extends Entity{
             }
         }
         for (Entity i: Main.ObjectToChange) {
-            if(i instanceof Brick || i instanceof Bomb || i instanceof Portal || i instanceof BombItem || i instanceof DeleteOneItem)
-            {
-                if(this.collision(i))
-                {
+            if(i instanceof Brick || i instanceof Bomb || i instanceof Portal || i instanceof BombItem || i instanceof DeleteOneItem) {
+                if(this.collision(i)) {
                     return true;
                 }
             }
@@ -199,8 +178,7 @@ public class Balloom extends Entity{
         return false;
     }
 
-    public void randomHuong()
-    {
+    public void randomHuong() {
         Random rd = new Random();
         huong = rd.nextInt(4);
     }

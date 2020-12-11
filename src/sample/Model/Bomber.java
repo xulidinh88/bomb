@@ -16,37 +16,29 @@ public class Bomber extends Entity {
     public void update() {
         //Xử lý va chạm:
         for (Entity i:Main.ObjectToChange) {
-            if(i instanceof Balloom)
-            {
-                if(this.collision(i))
-                {
+            if(i instanceof Balloom || i instanceof Doll) {
+                if(this.collision(i)) {
                     this.isDie = true;
                     break;
                 }
             }
             else continue;
         }
-        if(isDie)
-        {
-            if(!isDelete)
-            {
+        if(isDie) {
+            if(!isDelete) {
                 isDelete = true;
                 timeDead = System.currentTimeMillis();
             }
-            else
-            {
+            else {
                 this.img = player_dead.getCurrentFrame(300);
-                if(System.currentTimeMillis() - timeDead >= 900)
-                {
+                if(System.currentTimeMillis() - timeDead >= 900) {
                     Controller.GAME_OVER = true;
                     Main.ObjectToChange.remove(this);
                 }
             }
         }
-        else
-        {
-            if(!collinsMap())
-            {
+        else {
+            if(!collinsMap()) {
                 this.x += moveStepX;
                 this.y += moveStepY;
             }
@@ -54,15 +46,11 @@ public class Bomber extends Entity {
     }
 
     //Check va chạm với Brick và Wall
-    public boolean collinsMap()
-    {
+    public boolean collinsMap() {
         boolean collinsMap = false;
-        for(Entity o: Main.staticObject)
-        {
-            if(o instanceof Wall)
-            {
-                if(this.collision(o))
-                {
+        for(Entity o: Main.staticObject) {
+            if(o instanceof Wall) {
+                if(this.collision(o)) {
                     System.out.println("Va cham");
                     if(trangThai.equals(Huong.LEN)) this.y += STEP;
                     if(trangThai.equals(Huong.XUONG))this.y -= STEP;
@@ -74,12 +62,9 @@ public class Bomber extends Entity {
             }
             else continue;
         }
-        for (Entity o:Main.ObjectToChange)
-        {
-            if(o instanceof Brick)
-            {
-                if(this.collision(o))
-                {
+        for (Entity o:Main.ObjectToChange) {
+            if(o instanceof Brick) {
+                if(this.collision(o)) {
                     System.out.println("Va cham");
                     if(trangThai.equals(Huong.LEN)) this.y += STEP;
                     if(trangThai.equals(Huong.XUONG))this.y -= STEP;
@@ -89,21 +74,17 @@ public class Bomber extends Entity {
                     break;
                 }
             }
-            else if(o instanceof Portal)
-            {
-                if(this.collision(o))
-                {
+            else if(o instanceof Portal) {
+                if(this.collision(o)) {
                         //Kiểm tra Balloom đã bị tiêu diệt hết chưa và qua màn
                         System.out.println(Controller.bot);
-                        if(Controller.bot <= 0)
-                        {
+                        if(Controller.bot <= 0) {
                             Sound.play_anPortal();
                             Controller.PHA_DAO = true;
                             Main.ObjectToChange.remove(o);
                             System.out.println("Qua màn");
                         }
-                        else
-                        {
+                        else {
                             //Không thể đi vào
                             System.out.println("Va cham");
                             if(trangThai.equals(Huong.LEN)) this.y += STEP;
@@ -115,18 +96,14 @@ public class Bomber extends Entity {
                         }
                 }
             }
-            else if(o instanceof BombItem)
-            {
-                if(this.collision(o))
-                {
-                    if(((BombItem) o).hienThiBombItem == true)
-                    {
+            else if(o instanceof BombItem) {
+                if(this.collision(o)) {
+                    if(((BombItem) o).hienThiBombItem == true) {
                         Sound.play_anItem();
                         Main.ObjectToChange.remove(o);
                         Controller.kichThuocVuNo++;
                     }
-                    else
-                    {
+                    else {
                         System.out.println("Va cham BombItem");
 
                         if(trangThai.equals(Huong.LEN)) this.y += STEP;
@@ -140,24 +117,21 @@ public class Bomber extends Entity {
                 }
 
             }
-            else if(o instanceof DeleteOneItem)
-            {
-                if(this.collision(o))
-                {
-                    if(((DeleteOneItem) o).hienThiDeleteOneItem == true)
-                    {
+            else if(o instanceof DeleteOneItem) {
+                if(this.collision(o)) {
+                    if(((DeleteOneItem) o).hienThiDeleteOneItem == true) {
                         Main.ObjectToChange.remove(o);
                         Sound.play_anItem();
                         for (Entity f: Main.ObjectToChange){
                             if (f instanceof  Balloom || f instanceof Doll) {
                                 Main.ObjectToChange.remove(f);
+                                Sound.play_anItem();
                                 Controller.bot--;
                             }
                         }
                     }
-                    else
-                    {
-                        System.out.println("Va cham SpeedItem");
+                    else {
+                        System.out.println("Va cham DeleteOneItem");
 
                         if(trangThai.equals(Huong.LEN)) this.y += STEP;
                         if(trangThai.equals(Huong.XUONG))this.y -= STEP;
@@ -289,8 +263,7 @@ public class Bomber extends Entity {
         moveStepY = 0;
         moveStepX = 0;
     }
-    public void thaBom()
-    {
+    public void thaBom() {
         System.out.println("Thả bom");
         Bomb b = new Bomb(this.y,this.x);
         Main.ObjectToChange.add(b);
